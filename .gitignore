@@ -1,0 +1,13 @@
+build/
+install/
+log/
+ros2bag/
+*.bag
+*.db3
+*.o
+*.pt
+*.pth
+*.zip
+*.pcd
+*.csv
+*.dae

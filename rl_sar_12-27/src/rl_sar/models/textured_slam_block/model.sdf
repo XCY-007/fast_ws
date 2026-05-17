@@ -1,0 +1,229 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+    <model name="textured_slam_block">
+        <static>true</static>
+
+        <link name="building_shell">
+            <pose>0 0 1.8 0 0 0</pose>
+            <collision name="shell_collision">
+                <geometry>
+                    <box>
+                        <size>5.0 3.6 3.6</size>
+                    </box>
+                </geometry>
+            </collision>
+            <visual name="main_concrete_wall">
+                <geometry>
+                    <box>
+                        <size>5.0 3.6 3.6</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.46 0.43 0.38 1</ambient>
+                    <diffuse>0.58 0.54 0.48 1</diffuse>
+                    <specular>0.08 0.08 0.07 1</specular>
+                </material>
+            </visual>
+        </link>
+
+        <link name="front_facade_details">
+            <pose>0 -1.82 0 0 0 0</pose>
+
+            <visual name="brick_band_lower">
+                <pose>0 0 0.72 0 0 0</pose>
+                <geometry>
+                    <box>
+                        <size>5.08 0.06 1.05</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.45 0.18 0.11 1</ambient>
+                    <diffuse>0.62 0.25 0.16 1</diffuse>
+                </material>
+            </visual>
+
+            <visual name="brick_mortar_stripe_0">
+                <pose>0 0.035 0.25 0 0 0</pose>
+                <geometry><box><size>5.1 0.03 0.035</size></box></geometry>
+                <material><ambient>0.75 0.69 0.60 1</ambient><diffuse>0.82 0.76 0.67 1</diffuse></material>
+            </visual>
+            <visual name="brick_mortar_stripe_1">
+                <pose>0 0.035 0.50 0 0 0</pose>
+                <geometry><box><size>5.1 0.03 0.035</size></box></geometry>
+                <material><ambient>0.75 0.69 0.60 1</ambient><diffuse>0.82 0.76 0.67 1</diffuse></material>
+            </visual>
+            <visual name="brick_mortar_stripe_2">
+                <pose>0 0.035 0.75 0 0 0</pose>
+                <geometry><box><size>5.1 0.03 0.035</size></box></geometry>
+                <material><ambient>0.75 0.69 0.60 1</ambient><diffuse>0.82 0.76 0.67 1</diffuse></material>
+            </visual>
+            <visual name="brick_mortar_stripe_3">
+                <pose>0 0.035 1.00 0 0 0</pose>
+                <geometry><box><size>5.1 0.03 0.035</size></box></geometry>
+                <material><ambient>0.75 0.69 0.60 1</ambient><diffuse>0.82 0.76 0.67 1</diffuse></material>
+            </visual>
+
+            <visual name="front_door">
+                <pose>-1.65 0.045 0.88 0 0 0</pose>
+                <geometry>
+                    <box>
+                        <size>0.86 0.08 1.65</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.10 0.08 0.055 1</ambient>
+                    <diffuse>0.20 0.15 0.10 1</diffuse>
+                    <specular>0.15 0.12 0.08 1</specular>
+                </material>
+            </visual>
+            <visual name="front_door_handle">
+                <pose>-1.28 0.095 0.92 0 0 0</pose>
+                <geometry><sphere><radius>0.055</radius></sphere></geometry>
+                <material><ambient>0.95 0.74 0.28 1</ambient><diffuse>1.0 0.82 0.36 1</diffuse></material>
+            </visual>
+
+            <visual name="glass_window_left">
+                <pose>0.15 0.05 1.62 0 0 0</pose>
+                <geometry><box><size>1.10 0.06 0.82</size></box></geometry>
+                <material>
+                    <ambient>0.10 0.20 0.27 0.75</ambient>
+                    <diffuse>0.16 0.36 0.48 0.75</diffuse>
+                    <specular>0.45 0.65 0.75 1</specular>
+                </material>
+            </visual>
+            <visual name="glass_window_right">
+                <pose>1.62 0.05 1.62 0 0 0</pose>
+                <geometry><box><size>1.10 0.06 0.82</size></box></geometry>
+                <material>
+                    <ambient>0.10 0.20 0.27 0.75</ambient>
+                    <diffuse>0.16 0.36 0.48 0.75</diffuse>
+                    <specular>0.45 0.65 0.75 1</specular>
+                </material>
+            </visual>
+            <visual name="window_frame_left_vertical">
+                <pose>0.15 0.09 1.62 0 0 0</pose>
+                <geometry><box><size>0.055 0.06 0.92</size></box></geometry>
+                <material><ambient>0.08 0.08 0.08 1</ambient><diffuse>0.12 0.12 0.12 1</diffuse></material>
+            </visual>
+            <visual name="window_frame_right_vertical">
+                <pose>1.62 0.09 1.62 0 0 0</pose>
+                <geometry><box><size>0.055 0.06 0.92</size></box></geometry>
+                <material><ambient>0.08 0.08 0.08 1</ambient><diffuse>0.12 0.12 0.12 1</diffuse></material>
+            </visual>
+
+            <visual name="yellow_landmark_sign">
+                <pose>1.62 0.095 2.66 0 0 0</pose>
+                <geometry><box><size>1.25 0.055 0.38</size></box></geometry>
+                <material><ambient>0.95 0.70 0.04 1</ambient><diffuse>1.0 0.78 0.08 1</diffuse></material>
+            </visual>
+            <visual name="sign_black_mark">
+                <pose>1.62 0.13 2.66 0 0 0</pose>
+                <geometry><box><size>0.78 0.035 0.09</size></box></geometry>
+                <material><ambient>0.02 0.02 0.018 1</ambient><diffuse>0.03 0.03 0.025 1</diffuse></material>
+            </visual>
+        </link>
+
+        <link name="side_texture_panels">
+            <pose>2.53 0 0 0 0 0</pose>
+            <visual name="right_side_blue_panel">
+                <pose>0 0.35 1.6 0 0 0</pose>
+                <geometry><box><size>0.06 1.55 1.15</size></box></geometry>
+                <material><ambient>0.07 0.18 0.35 1</ambient><diffuse>0.10 0.28 0.55 1</diffuse></material>
+            </visual>
+            <visual name="right_side_rust_panel">
+                <pose>0 -0.95 1.35 0 0 0</pose>
+                <geometry><box><size>0.065 0.9 1.7</size></box></geometry>
+                <material><ambient>0.46 0.22 0.08 1</ambient><diffuse>0.65 0.32 0.12 1</diffuse></material>
+            </visual>
+            <visual name="right_side_pipe">
+                <pose>0.055 1.35 1.8 1.5708 0 0</pose>
+                <geometry><cylinder><radius>0.055</radius><length>2.7</length></cylinder></geometry>
+                <material><ambient>0.18 0.18 0.17 1</ambient><diffuse>0.36 0.35 0.32 1</diffuse></material>
+            </visual>
+        </link>
+
+        <link name="roof_and_equipment">
+            <pose>0 0 3.67 0 0 0</pose>
+            <visual name="dark_roof_slab">
+                <geometry><box><size>5.25 3.85 0.18</size></box></geometry>
+                <material><ambient>0.09 0.09 0.085 1</ambient><diffuse>0.16 0.16 0.15 1</diffuse></material>
+            </visual>
+            <collision name="roof_collision">
+                <geometry><box><size>5.25 3.85 0.18</size></box></geometry>
+            </collision>
+            <visual name="roof_hvac_box">
+                <pose>-1.25 0.75 0.35 0 0 0</pose>
+                <geometry><box><size>1.05 0.75 0.45</size></box></geometry>
+                <material><ambient>0.38 0.40 0.40 1</ambient><diffuse>0.58 0.60 0.60 1</diffuse></material>
+            </visual>
+            <visual name="roof_vent_cylinder">
+                <pose>1.45 -0.55 0.42 0 0 0</pose>
+                <geometry><cylinder><radius>0.18</radius><length>0.7</length></cylinder></geometry>
+                <material><ambient>0.22 0.22 0.22 1</ambient><diffuse>0.45 0.45 0.43 1</diffuse></material>
+            </visual>
+            <visual name="roof_red_marker">
+                <pose>1.48 -0.55 0.83 0 0 0</pose>
+                <geometry><sphere><radius>0.16</radius></sphere></geometry>
+                <material><ambient>0.62 0.04 0.03 1</ambient><diffuse>0.9 0.08 0.05 1</diffuse></material>
+            </visual>
+        </link>
+
+        <link name="street_clutter">
+            <pose>0 0 0 0 0 0</pose>
+            <collision name="curb_collision">
+                <pose>0 -2.25 0.10 0 0 0</pose>
+                <geometry><box><size>5.8 0.35 0.20</size></box></geometry>
+            </collision>
+            <visual name="painted_curb">
+                <pose>0 -2.25 0.10 0 0 0</pose>
+                <geometry><box><size>5.8 0.35 0.20</size></box></geometry>
+                <material><ambient>0.82 0.78 0.62 1</ambient><diffuse>0.96 0.91 0.72 1</diffuse></material>
+            </visual>
+            <visual name="curb_black_stripe_0">
+                <pose>-1.9 -2.45 0.23 0 0 0</pose>
+                <geometry><box><size>0.8 0.035 0.06</size></box></geometry>
+                <material><ambient>0.02 0.02 0.018 1</ambient><diffuse>0.03 0.03 0.025 1</diffuse></material>
+            </visual>
+            <visual name="curb_black_stripe_1">
+                <pose>0.0 -2.45 0.23 0 0 0</pose>
+                <geometry><box><size>0.8 0.035 0.06</size></box></geometry>
+                <material><ambient>0.02 0.02 0.018 1</ambient><diffuse>0.03 0.03 0.025 1</diffuse></material>
+            </visual>
+            <visual name="curb_black_stripe_2">
+                <pose>1.9 -2.45 0.23 0 0 0</pose>
+                <geometry><box><size>0.8 0.035 0.06</size></box></geometry>
+                <material><ambient>0.02 0.02 0.018 1</ambient><diffuse>0.03 0.03 0.025 1</diffuse></material>
+            </visual>
+
+            <visual name="crate_stack_a">
+                <pose>-2.25 1.35 0.28 0 0 0.15</pose>
+                <geometry><box><size>0.55 0.50 0.56</size></box></geometry>
+                <material><ambient>0.48 0.28 0.12 1</ambient><diffuse>0.64 0.39 0.17 1</diffuse></material>
+            </visual>
+            <collision name="crate_stack_a_collision">
+                <pose>-2.25 1.35 0.28 0 0 0.15</pose>
+                <geometry><box><size>0.55 0.50 0.56</size></box></geometry>
+            </collision>
+            <visual name="crate_stack_b">
+                <pose>-1.85 1.25 0.82 0 0 -0.2</pose>
+                <geometry><box><size>0.48 0.44 0.46</size></box></geometry>
+                <material><ambient>0.42 0.23 0.10 1</ambient><diffuse>0.58 0.34 0.15 1</diffuse></material>
+            </visual>
+
+            <visual name="blue_barrel">
+                <pose>2.05 1.28 0.43 0 0 0</pose>
+                <geometry><cylinder><radius>0.28</radius><length>0.86</length></cylinder></geometry>
+                <material><ambient>0.04 0.17 0.38 1</ambient><diffuse>0.05 0.30 0.68 1</diffuse></material>
+            </visual>
+            <collision name="blue_barrel_collision">
+                <pose>2.05 1.28 0.43 0 0 0</pose>
+                <geometry><cylinder><radius>0.28</radius><length>0.86</length></cylinder></geometry>
+            </collision>
+            <visual name="barrel_white_band">
+                <pose>2.05 1.28 0.63 0 0 0</pose>
+                <geometry><cylinder><radius>0.285</radius><length>0.08</length></cylinder></geometry>
+                <material><ambient>0.80 0.82 0.80 1</ambient><diffuse>0.95 0.96 0.93 1</diffuse></material>
+            </visual>
+        </link>
+    </model>
+</sdf>
