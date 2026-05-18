@@ -178,14 +178,60 @@
         <origin xyz="0.32 0 0.07" rpy="0 0.35 0"/> 
     </xacro:sensor_d435>
 
+    <!-- MID360-style lidar for FAST-LIVO2 simulation.
+         It publishes PointCloud2 on /livox/lidar with Gazebo sim time. -->
+    <gazebo reference="radar">
+      <sensor name="mid360_lidar" type="gpu_ray">
+        <always_on>true</always_on>
+        <visualize>false</visualize>
+        <update_rate>10</update_rate>
+        <pose>0 0 0 0 0 0</pose>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>1024</samples>
+              <resolution>1</resolution>
+              <min_angle>-3.141592653589793</min_angle>
+              <max_angle>3.141592653589793</max_angle>
+            </horizontal>
+            <vertical>
+              <samples>64</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.126012</min_angle>
+              <max_angle>0.963771</max_angle>
+            </vertical>
+          </scan>
+          <range>
+            <min>0.1</min>
+            <max>70.0</max>
+            <resolution>0.01</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+        <plugin name="mid360_lidar_controller" filename="libgazebo_ros_ray_sensor.so">
+          <ros>
+            <namespace>/</namespace>
+            <remapping>~/out:=/livox/lidar</remapping>
+          </ros>
+          <output_type>sensor_msgs/PointCloud2</output_type>
+          <frame_name>radar</frame_name>
+        </plugin>
+      </sensor>
+    </gazebo>
+
 
     <gazebo reference="imu_link">
       <sensor name="imu_sensor" type="imu">
       <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
           <ros>
             <namespace>/</namespace>
-            <remapping>~/out:=imu</remapping>
+            <remapping>~/out:=/imu</remapping>
           </ros>
+          <frame_name>imu_link</frame_name>
           <initial_orientation_as_reference>false</initial_orientation_as_reference>
         </plugin>
         <always_on>true</always_on>

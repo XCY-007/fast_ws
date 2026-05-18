@@ -237,12 +237,13 @@ void RL::InitRL(std::string robot_path)
     }
 
     // init model 在这加载模型
-    std::string model_path = std::string(CMAKE_CURRENT_SOURCE_DIR) + "/policy/" + robot_path + "/" + this->params.model_name;
-    this->model = torch::jit::load("/home/xyf/rl_sar_12-27/src/rl_sar/policy/go2/robot_lab/policy.pt");
-    this->extra_model = torch::jit::load("/home/xyf/rl_sar_12-27/src/rl_sar/policy/go2/robot_lab/policy-delay-1.pt");
-    this->camera_model = torch::jit::load("/home/xyf/rl_sar_12-27/src/rl_sar/policy/go2/robot_lab/depth_latest.pt");
-    this->op_estimator = torch::jit::load("/home/xyf/rl_sar_12-27/src/rl_sar/policy/go2/robot_lab/op_latest.pt");
-    this->selector = torch::jit::load("/home/xyf/rl_sar_12-27/src/rl_sar/policy/go2/robot_lab/selector_latest.pt");
+    std::string model_dir = std::string(CMAKE_CURRENT_SOURCE_DIR) + "/policy/" + robot_path;
+    std::string model_path = model_dir + "/" + this->params.model_name;
+    this->model = torch::jit::load(model_path);
+    this->extra_model = torch::jit::load(model_dir + "/policy-delay-1.pt");
+    this->camera_model = torch::jit::load(model_dir + "/depth_latest.pt");
+    this->op_estimator = torch::jit::load(model_dir + "/op_latest.pt");
+    this->selector = torch::jit::load(model_dir + "/selector_latest.pt");
     this->camera_model.eval();
     this->op_estimator.eval();
     this->selector.eval();

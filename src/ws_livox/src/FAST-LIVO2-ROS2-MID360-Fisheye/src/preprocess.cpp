@@ -11,6 +11,8 @@ which is included as part of this source code package.
 */
 
 #include "preprocess.h"
+#include <algorithm>
+#include <cmath>
 
 #define RETURN0 0x00
 #define RETURN0AND1 0x10
@@ -204,13 +206,56 @@ void Preprocess::mid360_handler(const sensor_msgs::msg::PointCloud2::ConstShared
   pl_corn.clear();
   pl_full.clear();
 
+  auto has_field = [&](const std::string &name) {
+    return std::any_of(msg->fields.begin(), msg->fields.end(),
+                       [&](const sensor_msgs::msg::PointField &field) {
+                         return field.name == name;
+                       });
+  };
+
+  if (!has_field("timestamp") || !has_field("tag") || !has_field("line")) {
+    pcl::PointCloud<pcl::PointXYZI> pl_orig;
+    pcl::fromROSMsg(*msg, pl_orig);
+    int plsize = pl_orig.points.size();
+    pl_surf.reserve(plsize);
+    if (plsize == 0) return;
+
+    const double scan_period_ms = 100.0;
+    const double min_valid_range = std::max(blind, 1.2);
+    const double min_valid_range_sqr = min_valid_range * min_valid_range;
+    const double max_valid_range = 69.0;
+    const double max_valid_range_sqr = max_valid_range * max_valid_range;
+    for (int i = 0; i < plsize; i++) {
+      if (i % point_filter_num != 0) continue;
+
+      PointType added_pt;
+      added_pt.normal_x = 0;
+      added_pt.normal_y = 0;
+      added_pt.normal_z = 0;
+      added_pt.x = pl_orig.points[i].x;
+      added_pt.y = pl_orig.points[i].y;
+      added_pt.z = pl_orig.points[i].z;
+      added_pt.intensity = pl_orig.points[i].intensity;
+      added_pt.curvature = float(i) / float(std::max(plsize - 1, 1)) * scan_period_ms;
+
+      const double range_sqr = added_pt.x * added_pt.x + added_pt.y * added_pt.y + added_pt.z * added_pt.z;
+      if (std::isfinite(added_pt.x) && std::isfinite(added_pt.y) && std::isfinite(added_pt.z) &&
+          range_sqr > min_valid_range_sqr && range_sqr < max_valid_range_sqr) {
+        pl_surf.points.push_back(added_pt);
+      }
+    }
+    return;
+  }
+
   pcl::PointCloud<mid360_ros::Point> pl_orig;
   pcl::fromROSMsg(*msg, pl_orig);
   int plsize = pl_orig.points.size();
   pl_surf.reserve(plsize);
+  if (plsize == 0) return;
   
   // Convert ROS timestamp to seconds (double precision)
   double msg_header_time = msg->header.stamp.sec + msg->header.stamp.nanosec * 1e-9;
+  double scan_period_ms = 100.0;
 
   for (int i = 0; i < plsize; i++) {
       // if((pl_orig.points[i].line < num_scans_) && ((pl_orig.points[i].tag & 0x30) == 0x10 || (pl_orig.points[i].tag & 0x30) == 0x00)){
@@ -223,7 +268,12 @@ void Preprocess::mid360_handler(const sensor_msgs::msg::PointCloud2::ConstShared
           added_pt.y = pl_orig.points[i].y;
           added_pt.z = pl_orig.points[i].z;
           added_pt.intensity = pl_orig.points[i].intensity;
-          added_pt.curvature = float(pl_orig.points[i].timestamp*1e-9 - msg_header_time)*1e3;  // curvature unit: ms
+          double point_time = pl_orig.points[i].timestamp * 1e-9;
+          if (std::isfinite(point_time) && point_time >= msg_header_time) {
+              added_pt.curvature = float(point_time - msg_header_time) * 1e3;  // curvature unit: ms
+          } else {
+              added_pt.curvature = float(i) / float(std::max(plsize - 1, 1)) * scan_period_ms;
+          }
           // std::cout<<"pl_orig.points[i].timestamp: "<<added_pt.curvature<<" "<<pl_orig.points[i].timestamp<<std::endl; 
 
           if (i % point_filter_num == 0) {

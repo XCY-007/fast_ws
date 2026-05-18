@@ -15,6 +15,7 @@ from launch.actions import TimerAction
 def generate_launch_description():
     rname = LaunchConfiguration("rname")
     wname = LaunchConfiguration("wname")
+    use_sim_time = LaunchConfiguration("use_sim_time")
     rl_sar_share = get_package_share_directory("rl_sar")
 
     robot_name = ParameterValue(Command(["echo -n ", rname]), value_type=str)
@@ -43,7 +44,10 @@ def generate_launch_description():
         executable="robot_state_publisher",
         name="robot_state_publisher",
         output="screen",
-        parameters=[{"robot_description": robot_description}],
+        parameters=[
+            {"robot_description": robot_description},
+            {"use_sim_time": use_sim_time},
+        ],
     )
 
     gazebo = IncludeLaunchDescription(
@@ -126,6 +130,11 @@ def generate_launch_description():
             "wname",
             description="World name in rl_sar/worlds (e.g., stairs, earth, urban)",
             default_value=TextSubstitution(text="stairs"),
+        ),
+        DeclareLaunchArgument(
+            "use_sim_time",
+            description="Use /clock from Gazebo",
+            default_value=TextSubstitution(text="true"),
         ),
         gazebo_model_path,
         robot_state_publisher_node,

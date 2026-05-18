@@ -300,18 +300,19 @@ void LIVMapper::initializeFiles()
 void LIVMapper::initializeSubscribersAndPublishers(rclcpp::Node::SharedPtr &node, image_transport::ImageTransport &it_)
 {
   image_transport::ImageTransport it(this->node);
+  auto sensor_qos = rclcpp::SensorDataQoS().keep_last(200000);
   if (p_pre->lidar_type == AVIA) {
-    sub_pcl = this->node->create_subscription<livox_ros_driver2::msg::CustomMsg>(lid_topic, 200000, std::bind(&LIVMapper::livox_pcl_cbk, this, std::placeholders::_1));
+    sub_pcl = this->node->create_subscription<livox_ros_driver2::msg::CustomMsg>(lid_topic, sensor_qos, std::bind(&LIVMapper::livox_pcl_cbk, this, std::placeholders::_1));
   } else {
-    sub_pcl = this->node->create_subscription<sensor_msgs::msg::PointCloud2>(lid_topic, 200000, std::bind(&LIVMapper::standard_pcl_cbk, this, std::placeholders::_1));
+    sub_pcl = this->node->create_subscription<sensor_msgs::msg::PointCloud2>(lid_topic, sensor_qos, std::bind(&LIVMapper::standard_pcl_cbk, this, std::placeholders::_1));
   }
-  sub_imu = this->node->create_subscription<sensor_msgs::msg::Imu>(imu_topic, 200000, std::bind(&LIVMapper::imu_cbk, this, std::placeholders::_1));
+  sub_imu = this->node->create_subscription<sensor_msgs::msg::Imu>(imu_topic, sensor_qos, std::bind(&LIVMapper::imu_cbk, this, std::placeholders::_1));
   if (enable_image_processing) {
     sub_img_compressed = this->node->create_subscription<sensor_msgs::msg::CompressedImage>(
-      img_topic, 200000, std::bind(&LIVMapper::jpeg_callback, this, std::placeholders::_1));
+      img_topic, sensor_qos, std::bind(&LIVMapper::jpeg_callback, this, std::placeholders::_1));
   } else {
     sub_img = this->node->create_subscription<sensor_msgs::msg::Image>(
-      img_topic, 200000, std::bind(&LIVMapper::img_cbk, this, std::placeholders::_1));
+      img_topic, sensor_qos, std::bind(&LIVMapper::img_cbk, this, std::placeholders::_1));
   }
   pubLaserCloudFullRes = this->node->create_publisher<sensor_msgs::msg::PointCloud2>("/cloud_registered", 100);
   pubNormal = this->node->create_publisher<visualization_msgs::msg::MarkerArray>("/visualization_marker", 100);
@@ -861,6 +862,11 @@ void LIVMapper::standard_pcl_cbk(const sensor_msgs::msg::PointCloud2::ConstShare
   // ROS_INFO("get point cloud at time: %.6f", stamp2Sec(msg->header.stamp));
   PointCloudXYZI::Ptr ptr(new PointCloudXYZI());
   p_pre->process(msg, ptr);
+  if (!ptr || ptr->empty()) {
+    RCLCPP_WARN(this->node->get_logger(), "Received an empty standard point cloud at %.6f", cur_head_time);
+    mtx_buffer.unlock();
+    return;
+  }
   lid_raw_data_buffer.push_back(ptr);
   lid_header_time_buffer.push_back(cur_head_time);
   last_timestamp_lidar = cur_head_time;
